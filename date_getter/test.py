@@ -1,4 +1,7 @@
+import os
+
 def range_test():
+    print os.getcwd()
     for num in range(12,13):
         print num
 

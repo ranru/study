@@ -1,8 +1,8 @@
 # config:utf-8
 
+import os
 import datetime
 
-saveDataFilePath = ""
 
 last_day_not_leap = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 last_day_leap = [0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
@@ -10,6 +10,9 @@ last_day_leap = [0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 # Get latest date from save.log file
 def GetSavedDate():
     latest_date = 0
+    cur = os.getcwd()
+    saveDataFilePath = cur + "/save.log"
+
     try:
         f = open(saveDataFilePath, 'r')
         line = f.readline()
@@ -47,8 +50,8 @@ def isLeapYear(year):
         return False
 
 def GetUpdateList():
-    #savedDate = GetSavedDate()
-    savedDate = 20150112
+    savedDate = int(GetSavedDate())
+    #savedDate = 20150112
     print savedDate
     sDate = SplitToYMD(savedDate)
 
