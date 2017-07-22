@@ -49,10 +49,7 @@ def isLeapYear(year):
     else:
         return False
 
-def GetUpdateList():
-    savedDate = int(GetSavedDate())
-    #savedDate = 20150112
-    print savedDate
+def GetUpdateList(savedDate):
     sDate = SplitToYMD(savedDate)
 
     begin_year = sDate[0]
@@ -92,21 +89,21 @@ def GetUpdateList():
             if begin_month == end_month:
                 for num in range(begin_day, end_day+1):
                     d = begin_year*10000 + begin_month*100 + num
-                    print d
+                    #print d
                     update_list.append(d)
             else:
                 for num in range(begin_day, last_day[begin_month]+1):
                     update = begin_year*10000 + begin_month*100 + num
-                    print update
+                    #print update
                     update_list.append(update)
                 for month in range(begin_month+1, end_month):
                     for day in range(1, last_day[month]+1):
                         update = begin_year*10000 + month*100 + day
-                        print update
+                        #print update
                         update_list.append(update)
                 for num in range(1, end_day+1):
                     update = end_year*10000 + end_month*100 + num
-                    print update
+                    #print update
                     update_list.append(update)
         else:
             # first check begin_year
@@ -117,13 +114,13 @@ def GetUpdateList():
 
             for num in range(begin_day, last_day[begin_month]+1):
                 update = begin_year*10000 + begin_month*100 + num
-                print update
+                #print update
                 update_list.append(update)
             if begin_month < 12:
                 for num in range(begin_month+1, 12+1):
                     for day in range(1, last_day[num]+1):
                         update = begin_year*10000 + num*100 + day
-                        print update
+                        #print update
                         update_list.append(update)
 
             # second check between begin_year and end_year
@@ -137,7 +134,7 @@ def GetUpdateList():
                     for month in range(1, 13):
                         for day in range(1, last_day[month]+1):
                             update = year*10000 + month*100 + day
-                            print update
+                            #print update
                             update_list.append(update)
 
             # at last check end_year
@@ -149,21 +146,32 @@ def GetUpdateList():
             for month in range(1, end_month):
                 for day in range(1, last_day[month]+1):
                     update = end_year*10000 + month*100 + day
-                    print update
+                    #print update
                     update_list.append(update)
             for day in range(1, last_day[end_month]+1):
                 update = end_year*10000 + end_month*100 + day
-                print update
+                #print update
                 update_list.append(update)
     else:
         print "error"
     return update_list
 
 
-def SaveLatestDate(latest_date):
+def SaveLatestDate(update_list):
+    latest_date = 0
+    for date in update_list:
+        if latest_date < date:
+            latest_date = date
+
+    print "latest_date = %d" % latest_date
+
+    cur = os.getcwd()
+    saveDataFilePath = cur + "/save.log"
     f = open(saveDataFilePath, "w")
-    f.write(latest_date)
+    f.write(str(latest_date))
     f.close
 
 if __name__ == '__main__':
-    update_list = GetUpdateList()
+    savedDate = int(GetSavedDate())
+    update_list = GetUpdateList(savedDate)
+    SaveLatestDate(update_list)
